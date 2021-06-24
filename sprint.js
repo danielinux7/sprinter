@@ -1,20 +1,8 @@
 const github = require("@actions/github");
 const core = require("@actions/core");
 
-// var labelsToAdd = core
-//   .getInput("add-labels")
-//   .split(",")
-//   .map(x => x.trim());
-
-// var labelsToRemove = core
-//   .getInput("remove-labels")
-//   .split(",")
-//   .map(x => x.trim());
-
 async function sprint() {
   const myToken = core.getInput("repo-token");
-//   const ignoreIfAssigned = core.getInput("ignore-if-assigned");
-//   const ignoreIfLabeled = core.getInput("ignore-if-labeled");
   const octokit = new github.GitHub(myToken);
   const context = github.context;
   const repoName = context.payload.repository.name;
@@ -36,10 +24,6 @@ async function sprint() {
     return "No action being taken. Ignoring because issueNumber was not identified";
   }
 
-//   labelsToAdd = labelsToAdd.filter(value => ![""].includes(value));
-
-//   labelsToRemove = labelsToRemove.filter(value => ![""].includes(value));
-
   // query for the most recent information about the issue. Between the issue being created and
   // the action running, labels or asignees could have been added
   var updatedIssueInformation = await octokit.issues.get({
@@ -48,49 +32,20 @@ async function sprint() {
     issue_number: issueNumber
   });
   
-  // Get the latest open sprint
-//   var sprintListInformation = await octokit.issues.listMilestones({
-//     owner: ownerName,
-//     repo: repoName
-//   });
-  
   var sprintListInformation = await octokit.request('GET /repos/{owner}/{repo}/milestones', {
     owner: ownerName,
     repo: repoName,
     state: "open"
   });
-  
-  sprint = sprintListInformation.data[0].number;
+
   // If in TODO, INPROGRESS or DONE columns
-//   if (ignoreIfAssigned) {
-//     // check if the issue has a sprint
-//     if (updatedIssueInformation.data.milestone_number !== -1) {
-//       return "No action being taken. Ignoring because one or more assignees have been added to the issue";
-//     }
-//   }
-  
-//   // If in BACKLOG column
-//   else if (ignoreIfAssigned) {
-//     // check if the issue has a sprint
-//     if (updatedIssueInformation.data.milestone_number !== -1) {
-//       return "No action being taken. Ignoring because one or more assignees have been added to the issue";
-//     }
-//   }
-
-//   let labels = updatedIssueInformation.data.labels.map(label => label.name);
-//   if (ignoreIfLabeled) {
-//     if (labels.length !== 0) {
-//       return "No action being taken. Ignoring because one or labels have been added to the issue";
-//     }
-//   }
-
-//   for (let labelToAdd of labelsToAdd) {
-//     if (!labels.includes(labelToAdd)) {
-//       labels.push(labelToAdd);
-//     }
-//   }
-
-//   labels = labels.filter(value => !labelsToRemove.includes(value));
+  if (github.event.project_card.column_id == '10215851' || github.event.project_card.column_id == '10215852' || github.event.project_card.column_id == '10215853') {
+    sprint = sprintListInformation.data[0].number;
+  }
+   // If in BACKLOG column
+  else {
+    sprint = null;
+  }
 
   await octokit.issues.update({
     owner: ownerName,
