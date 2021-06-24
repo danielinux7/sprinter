@@ -5,6 +5,9 @@ inputs:
     description: 'The GitHub token'
     required: false
     default: ${{ github.token }}
+  issue-column:
+    description: 'The column where the issue resides'
+    required: true
 branding:
   icon: zap-off
   color: orange
