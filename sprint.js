@@ -51,8 +51,7 @@ async function sprint() {
   // Get the latest open sprint
   var sprintListInformation = await octokit.issues.listMilestones({
     owner: ownerName,
-    repo: repoName,
-    state: "open"
+    repo: repoName
   });
   
   sprint = sprintListInformation.data[0].milestone_number;
