@@ -47,7 +47,15 @@ async function sprint() {
     repo: repoName,
     issue_number: issueNumber
   });
-
+  
+  // Get the latest open sprint
+   var sprintListInformation = await octokit.issues.listMilestones({
+    owner: ownerName,
+    repo: repoName,
+    state: "open"
+  });
+  
+  sprint = sprintListInformation.data[0].milestone_number;
   // If in TODO, INPROGRESS or DONE columns
 //   if (ignoreIfAssigned) {
 //     // check if the issue has a sprint
@@ -78,14 +86,14 @@ async function sprint() {
 //   }
 
 //   labels = labels.filter(value => !labelsToRemove.includes(value));
-  sprint = 5
+
   await octokit.issues.update({
     owner: ownerName,
     repo: repoName,
     issue_number: issueNumber,
     milestone: sprint
   });
-  return `Updated sprint in ${issueNumber}. Added: ${sprint}. Removed: ${sprint}.`;
+  return `Updated sprint ${sprint} in issue ${issueNumber}.`;
 }
 
 sprint()
