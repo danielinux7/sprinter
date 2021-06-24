@@ -83,7 +83,7 @@ async function sprint() {
     owner: ownerName,
     repo: repoName,
     issue_number: issueNumber,
-    milestone_number: sprint
+    milestone: sprint
   });
   return `Updated sprint in ${issueNumber}. Added: ${sprint}. Removed: ${sprint}.`;
 }
