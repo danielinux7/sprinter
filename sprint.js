@@ -54,9 +54,10 @@ async function sprint() {
 //     repo: repoName
 //   });
   
-  var sprintListInformation = await octokit.request('GET /repos/${owner}/${repo}/milestones', {
+  var sprintListInformation = await octokit.request('GET /repos/{owner}/{repo}/milestones', {
     owner: ownerName,
-    repo: repoName
+    repo: repoName,
+    state: "open"
   });
   
   sprint = sprintListInformation.data[0].number;
