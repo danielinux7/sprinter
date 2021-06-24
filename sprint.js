@@ -3,6 +3,7 @@ const core = require("@actions/core");
 
 async function sprint() {
   const myToken = core.getInput("repo-token");
+  const projectColumn = core.getInput("project-column");
   const octokit = new github.GitHub(myToken);
   const context = github.context;
   const repoName = context.payload.repository.name;
@@ -39,7 +40,7 @@ async function sprint() {
   });
 
   // If in TODO, INPROGRESS or DONE columns
-  if (github.event.project_card.column_id == '10215851' || github.event.project_card.column_id == '10215852' || github.event.project_card.column_id == '10215853') {
+  if (projectColumn == '10215851' || projectColumn == '10215852' || projectColumn == '10215853') {
     sprint = sprintListInformation.data[0].number;
   }
    // If in BACKLOG column
