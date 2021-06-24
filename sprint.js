@@ -54,7 +54,7 @@ async function sprint() {
     issue_number: issueNumber,
     milestone: sprint
   });
-  return `Updated sprint ${sprint} in issue ${issueNumber}.`;
+  return `Updated sprint ${issueColumn} in issue ${issueNumber}.`;
 }
 
 sprint()
